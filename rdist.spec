@@ -1,7 +1,7 @@
 Summary: Maintains identical copies of files on multiple machines
 Name: rdist
 Version: 6.1.5
-Release: 56%{?dist}
+Release: 61%{?dist}
 Epoch: 1
 # On Feb 17, 2011, Michael A. Cooper gave permission via email for all of his
 # copyrighted work in rdist to be relicensed to the same BSD as the rest of
@@ -65,7 +65,14 @@ cp %{SOURCE3} .
 %patch13 -p1 -b .re_args
 %patch14 -p1 -b .fix-msgsndnotify-loop
 
+# Don't touch or add any optimization options
+sed -i '/CFLAGS[ \t]*=/d' mf/Makefile.* rdist/Makefile
+sed -i '/OPT[ \t]*=/d' mf/Makefile.*
+sed -i 's/CFLAGS[ \t]*=/CFLAGS +=/' src/Makefile.real
+
 %build
+export CFLAGS="%{optflags} -D_POSIX_SOURCE -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
+
 make
 make -C rdist
 
@@ -93,6 +100,21 @@ install -m644 doc/rdistd.man ${RPM_BUILD_ROOT}%{_mandir}/man8/rdistd.8
 %{_mandir}/man8/rdistd.8*
 
 %changelog
+* Fri Mar 07 2014 Pavel Šimerda <psimerda@redhat.com> - 1:6.1.5-61
+- Resolves: #1070790 - refactor the CFLAGS handling
+
+* Fri Mar 07 2014 Pavel Šimerda <psimerda@redhat.com> - 1:6.1.5-60
+- Resolves: #1070790 - override CFLAGS when calling make
+
+* Thu Mar 06 2014 Pavel Šimerda <psimerda@redhat.com> - 1:6.1.5-59
+- Resolves: #1070790 - missing -fstack-protector-strong
+
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1:6.1.5-58
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1:6.1.5-57
+- Mass rebuild 2013-12-27
+
 * Tue Jul 30 2013 Michal Luscon <mluscon@redhat.com> - 1:6.1.5-56
 - Fixed #979258: rdist-6.1.5-license-fix.patch modifies patch backup files 
 

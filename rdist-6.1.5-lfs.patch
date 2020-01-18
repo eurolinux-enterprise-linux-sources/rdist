@@ -124,14 +124,3 @@
   * Our own declarations.
   */
  char			       *exptilde();
---- rdist-6.1.5/Makefile.local.lfs	1998-11-10 04:36:31.000000000 +0100
-+++ rdist-6.1.5/Makefile.local	2003-12-16 23:43:56.000000000 +0100
-@@ -39,7 +39,7 @@
- # Add any local definitions you want pass to the compiler to DEFS_LOCAL
- # below.  This includes those items found in "config/config.h".
- #
--#DEFS_LOCAL	= -DDIRECT_RCMD
-+DEFS_LOCAL	= -O2 -g -pipe -Wall -D_POSIX_SOURCE -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
- 
- #
- # Add any local libraries that your system might need to LIBS_LOCAL below.
